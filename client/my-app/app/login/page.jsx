@@ -6,8 +6,6 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 export default function Login() {
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     // Scene setup
     const scene = new THREE.Scene();
 
@@ -18,7 +16,7 @@ export default function Login() {
       0.1,
       1000
     );
-    camera.position.set(0, 1, 5); // Better initial camera position
+    camera.position.set(5, 8, 15); // Better initial camera position
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -27,58 +25,67 @@ export default function Login() {
 
     // Orbit controls
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.update();
+    controls.enableDamping = true; // Enables smooth damping
+    controls.dampingFactor = 0.25; // Damping factor for smoother controls
 
-    // Lighting (adding ambient and directional light)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
+    // // Lighting setup
+    // const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // scene.add(ambientLight);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(5, 10, 7.5);
     scene.add(directionalLight);
 
-    // GLTF Loader to load 3D model
+    // GLTF Loader to load the 3D model
     const loader = new GLTFLoader();
-    let object;
-    const objToRender = "la_night_city"; // Your model name
+    // const modelPath = "city"; // Your model name
+
+    let loadedModel;
 
     loader.load(
-      `/models/${objToRender}/scene.gltf`,
-      function (gltf) {
-        object = gltf.scene;
-        object.scale.set(0.5, 0.5, 0.5); // Scale the object (adjust as needed)
-        object.position.set(0, -1, 0); // Adjust position if needed
-        scene.add(object);
+      `./space/scene.gltf`, // Update with the correct path to your model
+      (gltf) => {
+        console.log("The scene has been loaded", gltf.scene);
+        loadedModel = gltf;
+        // model.rotate.y = Math.PI / 8;
+
+        loadedModel.scene.scale.set(0.1, 0.1, 0.1); // Keep positive scaling values
+        loadedModel.scene.position.set(0, 0, 0); // Adjust position if needed // Adjust position if needed
+        scene.add(loadedModel.scene);
       },
-      function (xhr) {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      (xhr) => {
+        console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
       },
-      function (error) {
+      (error) => {
         console.log("An error occurred:", error);
       }
     );
 
     // Animation loop
-    function animate() {
+    const animate = () => {
+      if (loadedModel) {
+        loadedModel.scene.scale.set(0.6, 0.6, 0.6);
+        loadedModel.scene.rotation.y += 0.001;
+        loadedModel.scene.rotation.z += 0.0001;
+      }
+
       requestAnimationFrame(animate);
       controls.update();
       renderer.render(scene, camera);
-    }
+    };
 
     animate();
 
     // Handle window resize
-    window.addEventListener("resize", () => {
+    const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    };
+
+    window.addEventListener("resize", handleResize);
 
     // Cleanup on component unmount
-    return () => {
-      window.removeEventListener("resize", () => {});
-      document.body.removeChild(renderer.domElement);
-    };
   }, []);
 
   return (
