@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Link from "next/link";
 import Homespline from "./Components/Loading/Homespline";
 
 export default function Home() {
+  const loadedModel = useRef(null);
   return (
     <div className="grid grid-cols-2 h-[100vh]">
       <div className="flex flex-col items-center justify-center">

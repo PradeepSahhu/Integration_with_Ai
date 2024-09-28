@@ -1,8 +1,9 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import Link from "next/link";
 
 export default function Login() {
   useEffect(() => {
@@ -29,8 +30,8 @@ export default function Login() {
     controls.dampingFactor = 0.25; // Damping factor for smoother controls
 
     // // Lighting setup
-    // const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    // scene.add(ambientLight);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(5, 10, 7.5);
@@ -89,8 +90,31 @@ export default function Login() {
   }, []);
 
   return (
-    <>
-      <h1>Login</h1>
-    </>
+    <div className="">
+      <div className="absolute top-[25rem] left-5">
+        <div>
+          <p className="text-[5rem] font-bold ">
+            Welcome to <span className="text-orange-600">space Colony</span>
+          </p>
+        </div>
+
+        <div>
+          <div className="flex gap-x-[2rem]">
+            <Link
+              className="bg-orange-950 px-5 py-2 rounded-xl hover:bg-transparent hover:outline-double hover:outline-orange-600"
+              href="/"
+            >
+              Get Started
+            </Link>
+            <Link
+              className="bg-blue-600 px-5 py-2 rounded-xl hover:bg-transparent hover:outline-double hover:outline-blue-800"
+              href="/"
+            >
+              Wait
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
