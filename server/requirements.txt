@@ -99,7 +99,6 @@ scipy==1.12.0
 setuptools==75.1.0
 simplejson==3.19.2
 six==1.16.0
-slither-analyzer @ file:///Users/pradeepsahu/Desktop/slither/slither
 solc-select==1.0.4
 soupsieve==2.5
 sqlacodegen==2.3.0.post1
