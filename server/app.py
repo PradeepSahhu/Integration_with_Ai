@@ -11,13 +11,9 @@ def showData():
 @app.route("/post",methods=["POST"])
 def getData():
     print(request.get_json())
-
-
-
     return jsonify({"message": "Data received", "data": request.get_json()})
     
 
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run()
